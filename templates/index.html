@@ -1,6 +1,15 @@
 <!DOCTYPE HTML>
+<html>
 <body>
-    {% for violator, information in violators.items() %}
-    <p>{{ violator }}: {{information.phoneNumber}} {{information.email}} {{information.distance}}<p>
-    {% endfor %}
+    <h1>No fly zone violators</h1>
+    <div id="violatorslist">
+        {% for violator, information in violators.items() %}
+        <p>{{ violator }}: {{information.phoneNumber}} {{information.email}} {{information.distance}}<p>
+        {% endfor %}
+    <div>
+    
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='update.js' )}}"></script>
 </body>
+</html>

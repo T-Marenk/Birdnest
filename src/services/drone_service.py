@@ -25,7 +25,7 @@ class DroneService:
     def get_drones(self) -> dict:
         """Function, which gets the xml from the website and turns it into a dictionary
         """
-
+        
         response = requests.get(self.url).text
 
         self.drones = xmltodict.parse(response)
