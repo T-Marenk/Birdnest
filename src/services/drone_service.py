@@ -21,8 +21,19 @@ class DroneService:
         self.drones = None
         self.violators = {}
         self.pilot = pilot_service
+        self.update_list = True
+    
+    def update_violators(self) -> dict:
+        for violator in self.violators:
+            self.violators[violator]['time'] += 1
+        
+        if self.update_list:
+            self.update_list = False
+            return self._get_drones()
+        self.update_list = True
+        return self.violators
 
-    def get_drones(self) -> dict:
+    def _get_drones(self) -> dict:
         """Function, which gets the xml from the website and turns it into a dictionary
         """
         
