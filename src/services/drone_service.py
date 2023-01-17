@@ -2,6 +2,7 @@ import requests
 import xmltodict
 from typing import Optional
 from math import sqrt
+from datetime import timedelta
 from src.config import DRONE_URL as default_url
 from src.services.pilot_service import pilot_service
 
@@ -24,8 +25,13 @@ class DroneService:
         self.update_list = True
     
     def update_violators(self) -> dict:
+        new_violators = self.violators.copy()
         for violator in self.violators:
-            self.violators[violator]['time'] += 1
+            new_violators[violator]['time'] += 1
+            new_violators[violator]['timeReadable'] = str(timedelta(seconds=new_violators[violator]['time']))[2:]
+            if new_violators[violator]['time'] == 600:
+                del new_violators[violator]
+        self.violators = new_violators
         
         if self.update_list:
             self.update_list = False
@@ -56,7 +62,7 @@ class DroneService:
             if distance is not None:
                 serial_number = drone['serialNumber']
                 information = self.pilot.get_pilot_information(serial_number) 
-                information['distance'] = distance/1000
+                information['distance'] = round(distance/1000)
                 self._add_violation(information)
 
     def _is_inside_circle(self, position_x, position_y) -> Optional[float]:
@@ -81,9 +87,10 @@ class DroneService:
         """
         
         name = information['name']
-        rest = {'email': information['email'], 'phoneNumber': information['phoneNumber'], 'distance': information['distance'], 'time': 0}
+        rest = {'email': information['email'], 'phoneNumber': information['phoneNumber'], 'distance': information['distance'], 'time': 0, 'timeReadable': str(timedelta(seconds=0))[2:]}
         if name in self.violators:
             self.violators[name]['time'] = 0
+            self.violators[name]['timeReadable'] = str(timedelta(seconds=0))[2:]
             if rest['distance'] < self.violators[name]['distance']:
                 self.violators[name]['distance'] = rest['distance']
             return

@@ -4,7 +4,15 @@
     <h1>No fly zone violators</h1>
     <div id="violatorslist">
         {% for violator, information in violators.items() %}
-        <p>{{ violator }}: {{information.phoneNumber}} {{information.email}} {{information.distance}} {{information.time}}<p>
+        <ul>
+            <li>{{ violator }}:</li>
+            <ul>
+                <li>Phonenumber: {{information.phoneNumber}}</li>
+                <li>Email: {{information.email}}</li>
+                <li>Closest distance to nest: {{information.distance}} meters</li>
+                <li>Time since violation: {{information.timeReadable}}</li>
+            </ul>
+        </ul>
         {% endfor %}
     <div>
     
