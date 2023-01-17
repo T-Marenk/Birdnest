@@ -23,8 +23,10 @@ class DroneService:
         self.violators = {}
         self.pilot = pilot_service
         self.update_list = True
-    
-    def update_violators(self) -> dict:
+    def get_violators(self)  -> dict:
+        return self.violators
+
+    def _update_violators(self) -> dict:
         new_violators = self.violators.copy()
         for violator in self.violators:
             new_violators[violator]['time'] += 1
